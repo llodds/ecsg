@@ -4,7 +4,7 @@ ECSG - A package for anisotropic elastic wave simulations based on a stable comp
 
 ## Note: 
 1. This package is able to perform both single grid and multiple (>=2) grids schemes with energy-conserving condition implemented at grid refinement interfaces to ensure numerical stability.
-2. This package relies on [Madagascar](https://github.com/ahay/src), OpenMP and [scons](http://scons.org), so have them installed before compiling the code.
+2. This package relies on [Madagascar](https://github.com/ahay/src), OpenMP and [scons](http://scons.org), so have them installed or loaded before compiling the code.
 3. Currently the scheme is based on FDTD of second order in time and space. Free surface boundary condition is implemented on top, and rigid (Dirichlet) boundary condition is implemented on other three sides of the rectangular domain.
 
 ===================================================================
@@ -35,7 +35,7 @@ ECSG - A package for anisotropic elastic wave simulations based on a stable comp
 ===================================================================
 
 ## TODO
-- [ ]Tests on 3D data.
-- [ ]MPI parallelization.
-- [ ]Extend this composite grid scheme to high order FDTD.
+- [ ] Tests on 3D data.
+- [ ] MPI parallelization.
+- [ ] Extend this composite grid scheme to high order FDTD.
 
