@@ -30,7 +30,7 @@ ECSG - A package for anisotropic elastic wave simulations based on a stable comp
 * **tests**: test scripts
 ===================================================================
 ## TODO
-- []Tests on 3D data.
-- []MPI parallelization.
-- []Extend this composite grid scheme to high order FDTD.
+- [ ]Tests on 3D data.
+- [ ]MPI parallelization.
+- [ ]Extend this composite grid scheme to high order FDTD.
 
