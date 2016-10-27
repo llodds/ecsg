@@ -1,11 +1,14 @@
 ===================================================================
-ECSG - A package for anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme
+ECSG - A package for 3D anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme
 ===================================================================
 
+### Why we need composite grid?
+In comparion to the classical uniform grid scheme which has the same mesh size over the entire simulation domain, composite grid scheme uses fine mesh for low velocity regions and coarse mesh for high velocity regions. So when the domain has a low velocity zone, for example in the shallow region, we have to use a very find uniform grid whose mesh size 
+
 ### Why we need stability?
-In numerical analysis, numerical stability is always an important property we are looking for when we design a numerical scheme. Stability means a perturbation in the initial solution (e.g., machine error) will not blow up over time. Lax-Richtmyer theorem claims that for a linear consistent numerical scheme (e.g., finite difference scheme based on the wave equation), stability is a sufficient and necessary condition to convergence, which measures how well the numerical solution will be close to the true solution if we keep reducing the mesh size. Due to these reasons, we need a stable numerical scheme.
-### What is energy method?
-Energy Method is 
+In numerical analysis, numerical stability is always an important property we are looking for when we design a numerical scheme. Stability means a perturbation in the initial solution (e.g., machine error) will not blow up over time. Lax-Richtmyer theorem claims that for a linear consistent numerical scheme (e.g., finite difference scheme based on the wave equation), stability is a sufficient and necessary condition for convergence, which measures how close the numerical solution will be to the true solution if we keep reducing the mesh size. Because of these reasons, we need a stable numerical scheme.
+### What is energy method and how we use the energy method to achieve numerical stability for the composite staggered grid FDTD scheme based on the elastic wave equation?
+After figuring out how to formulate the energy for the numerical solution on a uniform grid, we compute the energy on the composite grid by summing up energies on each individual uniform grid, 
 
 
 ===================================================================
@@ -45,5 +48,6 @@ Energy Method is
 ## TODO
 - [ ] Tests on 3D data.
 - [ ] MPI parallelization.
+- [ ] Extend this composite grid scheme to deal with solid-fluid interface.
 - [ ] Extend this composite grid scheme to high order FDTD.
 
