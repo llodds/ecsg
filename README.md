@@ -1,10 +1,12 @@
 ===================================================================
-ECSG - A package for anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme
+ECSG - --A package for anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme--
+
 ===================================================================
 ## Note: 
 1. This package is able to perform both single grid and multiple (>=2) grids schemes with energy-conserving condition implemented at grid refinement interfaces to ensure numerical stability.
 2. This package relies on [Madagascar](https://github.com/ahay/src) and OpenMP, so have [Madagascar](https://github.com/ahay/src) and OpenMP installed before compiling the code.
 3. Currently the scheme is based on FDTD of second order in time and space. Free surface boundary condition is implemented on top, and rigid (Dirichlet) boundary condition is implemented on other three sides of the rectangular domain.
+
 ===================================================================
 ## Structure
 * **SConstruct-local/SConstruct-tacc**: python scripts for code compilation on OSX and TACC/Stampede respectively. To compile this package, copy either one of the scripts to SConstruct, and then run scons.
@@ -28,6 +30,7 @@ ECSG - A package for anisotropic elastic wave simulations based on a stable comp
 * **test_utils.hpp**: list of test function signatures with functions defined in:
   * **test_sbp.cpp**: functions test SBP property.
 * **tests**: test scripts
+
 ===================================================================
 ## TODO
 - [ ]Tests on 3D data.
