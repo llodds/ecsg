@@ -1,0 +1,197 @@
+#=====================================================
+#=====================================================
+#=====================================================
+#   This script is used to compare wave simulations with a free surface top
+#   and a rigid surface top. The simulation is based on uniform grid esg.
+
+from rsf.proj import*
+import math
+import os
+import platform
+import sys
+
+if platform.system()=='Darwin':
+    #   main at local
+    main = os.path.abspath('/Users/muhongzhou/Documents/PhD/reports-doc/R20-ecsg-tacc/main')
+    sys.path.append('/Users/muhongzhou/Documents/PhD/reports-doc/R20-ecsg-tacc/tests/test1-cmp-eci-ii/')
+elif platform.system()=='Linux':
+    #   main at tacc
+    main = os.path.abspath('/work/02049/mz10/ecsg/main')
+    sys.path.append('/work/02049/mz10/ecsg/tests/test1-cmp-eci-ii/')
+else:
+    os._exit(1)
+
+#from par import * #to ease testing
+n_extra=5
+cfl=0.98
+n_samples_per_wavelength=15
+lx=450
+ly=450
+lz1=150
+lz2=150
+duration=300
+
+
+#=====================================================
+#   Set up source (ricker wavelet) main frequency [Hz]
+fpeak = 15.
+
+
+#=====================================================
+#   Set up material parameters
+#   unit: rho[g/m^3], cs/cp[m/ms], lx/ly/lz[m]
+layer1 = {'rho':2.5, 'cs':1., 'cp':2., 'lx':lx, 'ly':ly, 'lz':lz1}
+#layer2 = {'rho':2.65, 'cs':2., 'cp':4., 'lx':layer1['lx'], 'ly':layer1['ly'], 'lz':lz2}
+layer2 = {'rho':2.5, 'cs':1., 'cp':2., 'lx':layer1['lx'], 'ly':layer1['ly'], 'lz':lz2}
+layers=[layer1, layer2]
+for i in range(len(layers)):
+    layers[i]['buoy'] = 1/layers[i]['rho']
+    layers[i]['s11'] = layers[i]['rho']*layers[i]['cp']**2
+    layers[i]['s13'] = layers[i]['s11']-2*layers[i]['rho']*layers[i]['cs']**2
+
+
+#=====================================================
+#   Set up grid: (ix,iy,iz) in [0, nx]*[0, ny]*[0, nz], ix is the fastest dim
+dx1 = layer1['cs']*1000/fpeak/n_samples_per_wavelength
+grid1 = {'dx':dx1, 'dy':dx1, 'dz':dx1}
+grid2 = {'dx':dx1*2, 'dy':dx1*2, 'dz':dx1*2}
+
+#   Make sure grid1['nx']=2*grids2['nx'] to make sure the grid interface is aligned
+grid2['nx']=int(layer2['lx']/grid2['dx'])
+grid2['ny']=int(layer2['ly']/grid2['dy'])
+grid1['nx']=2*grid2['nx']
+grid1['ny']=2*grid2['ny']
+
+grid2['nz']=int(layer2['lz']/grid2['dz'])
+grid1['nz']=int(layer1['lz']/grid1['dz']/2)*2+grid2['nz']*2
+print grid1
+
+#=====================================================
+#   create buoyancy, stiffness file
+#   [buoy_0, buoy_1, ...]
+#   [s11_0, s11_1, ...]
+#   [s13_0, s13_1, ...]
+#   suppose only n_extra fine grid points is in layer2
+#n_extra=1
+par_name = ['buoy', 's11', 's13']
+for i in range(len(par_name)):
+    Flow('%s_0_0'%(par_name[i]), None, ''' spike
+        n1=%d n2=%d n3=%d
+        d1=%f d2=%f d3=%f
+        label1="Distance(X)" unit1="m"
+        label2="Distance(Y)" unit2="m"
+        label3="Distance(Z)" unit3="m"
+        mag=%f
+        '''%(grid1['nx']+1,grid1['ny']+1,int(layer1['lz']/grid1['dz']/2)*2+1-n_extra,
+             grid1['dx'], grid1['dy'], grid1['dz'],
+                 layer1[par_name[i]]))
+    Flow('%s_0_1'%(par_name[i]), None, ''' spike
+        n1=%d n2=%d n3=%d
+        d1=%f d2=%f d3=%f
+        label1="Distance(X)" unit1="m"
+        label2="Distance(Y)" unit2="m"
+        label3="Distance(Z)" unit3="m"
+        mag=%f
+        '''%(grid1['nx']+1,grid1['ny']+1,n_extra+grid2['nz']*2,
+             grid1['dx'], grid1['dy'], grid1['dz'],
+             layer2[par_name[i]]))
+    Flow('%s_0'%(par_name[i]),['%s_0_0'%(par_name[i]), '%s_0_1'%(par_name[i])],'''cat ${SOURCES[1:-1]} axis=3''')
+    Flow('dummy_%s'%(par_name[i]),['%s_0_0'%(par_name[i]), '%s_0_1'%(par_name[i])],'''rm ${SOURCES[0:-1]}''',stdout=0,stdin=0)
+
+#=====================================================
+#   Set up simulation time step: dt
+#cfl = 0.95
+max_vel = layer1['cp']
+for i in range(len(layers)):
+    if max_vel < layers[i]['cp']:
+        max_vel = layers[i]['cp']
+dt = min(grid1['dx'],grid1['dy'],grid1['dz'])/max_vel/math.sqrt(3)*cfl #[ms]
+print dt
+
+#=====================================================
+#   Set up source profile
+pi = math.atan(1)*4.
+ricker_tmp = (pi**2)*(fpeak**2)
+ricker_pars = {
+    'src_x':int(layer1['lx']/2/grid2['dx'])*grid2['dx'],
+    'src_y':int(layer1['ly']/2/grid2['dy'])*grid2['dy'],
+    'src_z':int(layer1['lz']*0.8/grid2['dz'])*grid2['dz'],
+    'src_nt':700,
+    'src_dt':dt/1000., #because src_dt is of unit [s]
+    'tmp':ricker_tmp,
+    'delrt':1/fpeak,
+}
+print ricker_pars
+
+ricker_pars['equation']="(1-2*(%(tmp)f)*(x1-%(delrt)f)*(x1-%(delrt)f))*exp(-(%(tmp)f)*(x1-%(delrt)f)*(x1-%(delrt)f))"%ricker_pars
+Flow('ricker',None,'''math
+    n1=%(src_nt)d o1=0 d1=%(src_dt)f output=\"%(equation)s\"
+    n2=1 o2=%(src_x)f
+    n3=1 o3=%(src_y)f
+    n4=1 o4=%(src_z)f |
+    put label1="Time" unit1="s"
+    label2="Distance(X)" unit2="m"
+    label3="Distance(Y)" unit3="m"
+    label4="Distance(Z)" unit4="m"
+    '''%ricker_pars)
+Result('ricker','''graph title="Ricker Source" ''')
+
+#=====================================================
+#   Set up rec_trace profile
+#   rec_trace.asci (n1: x,y,z displacement, n2: number of receivers)
+rec_trace_pars = {
+    'rec1_x':int(layer1['lx']/2/grid2['dx'])*grid2['dx'],
+    'rec2_x':int(layer1['lx']*0.7/grid2['dx'])*grid2['dx'],
+    'rec1_y':int(layer1['ly']/2/grid2['dy'])*grid2['dy'],
+    'rec1_z':int(layer1['lz']*0.8/grid2['dz'])*grid2['dz']-10*grid2['dz'],
+    'rec2_z':int(layer1['lz']*0.8/grid2['dz'])*grid2['dz']+10*grid2['dz'],
+    'rec3_z':int(layer1['lz']/grid1['dz']/2)*2*grid1['dz']+10*grid2['dz']
+}
+Flow('rec_trace.asci', None, '''echo
+    '%(rec1_x)f %(rec1_y)f %(rec1_z)f
+    %(rec1_x)f %(rec1_y)f %(rec2_z)f
+    %(rec1_x)f %(rec1_y)f %(rec3_z)f
+    %(rec2_x)f %(rec1_y)f %(rec1_z)f
+    %(rec2_x)f %(rec1_y)f %(rec2_z)f
+    %(rec2_x)f %(rec1_y)f %(rec3_z)f'
+    '''%rec_trace_pars)
+Flow('rec_trace','rec_trace.asci','''echo in=${SOURCES[0]} n1=3 n2=6 data_format=ascii_float | dd form=native''')
+
+#=====================================================
+#=====================================================
+#   Main Program
+tests = ['rigid-top', 'free-top']
+for i in range(len(tests)):
+    nframe=int(duration/(10*dt))
+    movie_dt=10*dt
+    Flow(['out%d.txt'%(i), 'energy%d'%(i), 'res_trace%d'%(i), 'rec_out%d'%(i), 'movie_vx%d'%(i)],
+         ['ricker', 'rec_trace', 'buoy_0', 's11_0', 's13_0'],
+            main + ''' num_threads=16
+             num_grids=1 top_bc=%d
+             buoy_1=${SOURCES[2]} s11_1=${SOURCES[3]} s13_1=${SOURCES[4]}
+             dt=%f radius=1 src_type=1 src=${SOURCES[0]}
+             check_energy=y energy_trace=${TARGETS[1]}
+             movie_dt=%f movie_nt=%d
+             movie_vx_flag=y movie_vx_1=${TARGETS[4]}
+             rec_in=${SOURCES[1]} rec_out=${TARGETS[3]}
+             verb=y res_trace=${TARGETS[2]}
+             '''%(i,dt,movie_dt,nframe), stdin=0)
+
+    Result('energy%d'%(i),'''sfgraph scalebar=y title="Energy: e(t)" ''')
+    Flow('rec_out%d.hh'%(i),'rec_out%d'%(i),'sfcp --out=stdout')
+    #   create movie
+    Result('movie_vx%d'%(i),
+           '''
+               transp plane=13 | transp plane=23 | byte gainpanel=all |
+               grey4 frame1=%d frame2=%d frame3=%d clip=0.01
+               title="vx (fine grid)"  flat=n
+               '''%(grid1['nz']/2,grid1['nx']/2,grid1['ny']/2))
+    #   create movie snapshot
+    tframe=nframe-3
+    movie_t=tframe*movie_dt
+    title = "vx (uniform grid, %s), time = %.1f ms"%(tests[i], movie_t)
+    Result('movie_vx_t%d_%s'%(tframe,tests[i]), 'movie_vx%d'%(i),
+           '''window f4=%d n4=1 | transp plane=13 | transp plane=23 | byte gainpanel=all |
+               grey3 frame1=%d frame2=%d frame3=%d clip=0.01
+               title="%s"  flat=y
+               '''%(tframe,grid1['nz']/2,grid1['nx']/2,grid1['ny']/2,title))

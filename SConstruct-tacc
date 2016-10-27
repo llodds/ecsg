@@ -1,0 +1,18 @@
+import os
+
+RSFROOT=os.getenv('RSFROOT')
+RSFROOT_LIB=os.path.join(RSFROOT, 'lib')
+RSFROOT_INC=os.path.join(RSFROOT, 'include')
+
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+env['CXX']='icpc'
+env['CXXFLAGS']=['-O3', '-openmp', '-std=c++14']
+env['CPPPATH']=[RSFROOT_INC]
+env['CPPDEFINES']=['NO_BLAS'] #because madagascar is compiled this way in stampede                                                                            
+env['LIBS']=['rsf++','rsf', 'm']
+env['LIBPATH']=[RSFROOT_LIB]
+env['LINKFLAGS']=['-openmp']
+
+
+env.Program(target = 'main',
+            source = Glob('*.cpp'))
