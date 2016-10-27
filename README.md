@@ -3,12 +3,12 @@ ECSG - A package for anisotropic elastic wave simulations based on a stable comp
 ===================================================================
 
 ## Note: 
-1. This package is able to perform both single grid and multiple (>2) grids schemes with energy-conserving condition implemented at grid refinement interface to ensure numerical stability.
+1. This package is able to perform both single grid and multiple (>=2) grids schemes with energy-conserving condition implemented at grid refinement interfaces to ensure numerical stability.
 2. This package relies on Madagascar/rsf interface, so install Madagascar before compiling the code.
 3.
 
 ===================================================================
-## Structure of the code
+## Structure
 * **SConstruct-local/SConstruct-tacc**: python scripts for code compilation on OSX and TACC/Stampede respectively. To compile this package, copy either one of the scripts to SConstruct, and then run scons.
 * **main.cpp**: driver of this program.
 * **init.hpp**: set up precision macros.
@@ -22,6 +22,7 @@ ECSG - A package for anisotropic elastic wave simulations based on a stable comp
   * **init_del_fd_coeff.cpp**: functions initialize and delete finite difference coefficients.
   * **init_src.cpp**: functions initialize a Ricker source.
   * **init_del_rec_trace**: functions initialize and delete a set of receiver traces.
-* **init_del_movie.cpp**: functions initlalize and delete rsf movies.
-* **init_del_res_trace.cpp**: functions initialize and 
+  * **init_del_movie.cpp**: functions initlalize and delete rsf movies.
+  * **init_del_res_trace.cpp**: functions initialize and delete residue traces
+  * **update_*.cpp**:
 
