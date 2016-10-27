@@ -2,6 +2,14 @@
 ECSG - A package for anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme
 ===================================================================
 
+### --Why we need stability?--
+In numerical analysis, numerical stability is always an important property we are looking for when we design a numerical scheme. Stability means a perturbation in the initial solution (e.g., machine error) will not blow up over time. Lax-Richtmyer theorem claims that for a linear consistent numerical scheme (e.g., finite difference scheme based on the wave equation), stability is a sufficient and necessary condition to convergence, which measures how well the numerical solution will be close to the true solution if we keep reducing the mesh size. Due to these reasons, we need a stable numerical scheme.
+### --What is energy method?--
+Energy Method is 
+
+
+===================================================================
+
 ## Note: 
 1. This package is able to perform both single grid and multiple (>=2) grids schemes with energy-conserving condition implemented at grid refinement interfaces to ensure numerical stability.
 2. This package relies on [Madagascar](https://github.com/ahay/src), OpenMP and [scons](http://scons.org), so have them installed or loaded before compiling the code.
