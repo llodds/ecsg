@@ -1,10 +1,13 @@
 ===================================================================
-ECSG -- A package to 
+ECSG -- A package for Anisotropic Elastic Wave Simulations Based on A Stable Composite Staggered Grid Finite Difference Time Domain Numerical Scheme
 ===================================================================
 
+## Note: 
+1. this code is able to perform both single grid and multiple grids (with energy-conserving interface
+2. 
+
 ===================================================================
-Structure
-===================================================================
+
   * init.hpp: contains pre-defined macros
 
   * grid.hpp: contains the grid structure
