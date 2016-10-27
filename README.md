@@ -7,12 +7,12 @@ ECSG - A package for anisotropic elastic wave simulations based on a stable comp
 ##2. This code is able to 
 
 ===================================================================
-# Structure of the code
-## SConstruct-local and SConstruct-tacc are python scripts for code compilation on OSX and TACC/Stampede respectively. To compile this package, copy either one of the scripts to SConstruct, and then run scons.
-## main.cpp: driver of this program.
-## init.hpp: set up precision.
-## grid.hpp: A C struct defines grid.
-## field.hpp/field.cpp: A C++ class defines simulation fields and related operations.
+## Structure of the code
+* **SConstruct-local/SConstruct-tacc**: python scripts for code compilation on OSX and TACC/Stampede respectively. To compile this package, copy either one of the scripts to SConstruct, and then run scons.
+* **main.cpp**: driver of this program.
+* **init.hpp**: set up precision.
+* **grid.hpp**: A C struct defines grid.
+* **field.hpp/field.cpp**: A C++ class defines simulation fields and related operations.
 ## array.hpp/array.cpp: A C++ class defines multi-dimensional matrices.
 ## sim_utils.hpp: 
 
