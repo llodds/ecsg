@@ -20,7 +20,7 @@ After formulating the energy for the numerical solution of the second-order anis
 This package is built to verify numerical stability and convergence of 3D elastic wave simulations based on this stable compostie staggered grid FDTD scheme. 
 
 1. This package is able to perform both single grid and multiple (>=2) grids schemes with energy-conserving interpolation implemented at grid refinement interfaces to ensure numerical stability.
-2. This package relies on [Madagascar](https://github.com/ahay/src), OpenMP and [scons](http://scons.org), so have them installed or loaded before compiling the code.
+2. This package relies on [Madagascar](https://github.com/ahay/src), OpenMP and [scons](http://scons.org), so have them installed or loaded before compiling the code. You may need to modify paths when running tests.
 3. Currently the scheme is based on FDTD of second order in time and space. Free surface boundary condition is implemented on top, and rigid (Dirichlet) boundary condition is implemented on other three sides of the rectangular domain.
 
 ===================================================================
