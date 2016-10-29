@@ -3,14 +3,18 @@
 
 ===================================================================
 
-### Why composite grid?
+### Why the composite grid?
 It is well known that finite difference scheme suffers from grid dispersion. To minimize this numerical aritifact, we need to sample each wavelength by at least a certain number of grid points. When the simulation domain contains a low velocity zone, for example the shallow region, using the classical uniform grid scheme (same mesh size over the entire domain) would require a very fine mesh. In contrast, a composite grid scheme, which uses fine mesh for low velocity region and coarse mesh for high velocity region, needs less grid points to simulate the same region, so it helps to reduce the memory and computing cost of the simulation.
 
 ### Why we need stability?
 In numerical analysis, numerical stability is always an important property we are looking for when we design a numerical scheme. Stability means a perturbation in the initial solution (e.g., machine error) will not blow up over time. Lax-Richtmyer theorem claims that for a linear consistent numerical scheme (e.g., finite difference scheme based on the wave equation), stability is a sufficient and necessary condition for convergence, which measures how close the numerical solution will be to the true solution if we keep reducing the mesh size. Because of these reasons, we need a stable numerical scheme.
 
 ### What is energy method and how we use the energy method to achieve numerical stability for this composite staggered grid FDTD scheme based on the elastic wave equation?
-After figuring out how to formulate the energy for the numerical solution on a uniform grid, we compute the energy on the composite grid by summing up energies on each individual uniform grid, 
+Energy method helps to analyze and derive stability conditions. It starts by formulating an energy of the numerical solution, which is often in the form of a bilinear semidefinite norm of the numerical solution. Note the energy is not the same energy as the one defined in physics, but often this energy is formulated based on the physics definition. If this energy is conserved over time, and if the time step is chosen such that it is equivalent to the L2 norm of the solution, then the scheme is stable. 
+
+As opposed to physics 
+
+After figuring out how to formulate the energy for the numerical solution on a uniform grid, we compute the energy on a composite grid by summing up energies on each individual uniform grid. We find that in order to conserve the energy on this composite grid, the unknown ghost data near the grid refinement interface, which are built to compute interface field data, have to satisfy a certain condition which is a set of linear equations with those ghost data as unknowns. On the other hand, the transmission condition across the interface imposes another set of linear equations on the ghost data. These two sets of ghost data 
 
 
 ===================================================================
