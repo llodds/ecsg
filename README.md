@@ -1,7 +1,6 @@
-===================================================================
-#ECSG - A package for 3D anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme
+#ECSG
 
-===================================================================
+A package for 3D anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme
 
 ### Why the composite grid?
 It is well known that finite difference scheme suffers from grid dispersion. To minimize this numerical aritifact, we need to sample each wavelength by at least a certain number of grid points. When the simulation domain contains a low velocity zone, for example the shallow region, using the classical uniform grid scheme (same mesh size over the entire domain) would require a very fine mesh. In contrast, a composite grid scheme, which uses fine mesh for low velocity region and coarse mesh for high velocity region, needs less grid points to simulate the same region, so it helps to reduce the memory and computing cost of the simulation.
