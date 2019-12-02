@@ -95,7 +95,7 @@ void UpdateGhostVZ(Field *sim1, Field *sim2,
                 + vz2.GetVal(i0,i1,0)/3
                 + vz2.GetVal(i0,i1+1,0)/3;
                 
-                int i1 = vz1.GetEnd(0);
+                i0 = vz1.GetEnd(0);
                 vz1.SetVal(i0,2*i1,nz1) = vz1.GetVal(i0,2*i1,nz1-1)*2/3
                 - vz1.GetVal(i0-1,2*i1,nz1-1)/3
                 + vz2.GetVal(i0,i1,0)*2/3;
