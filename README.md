@@ -1,4 +1,4 @@
-#ECSG
+# ECSG
 
 A package for 3D anisotropic elastic wave simulations based on a stable composite staggered grid finite difference time domain numerical scheme
 
