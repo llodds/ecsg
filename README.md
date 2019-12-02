@@ -22,9 +22,7 @@ This package is built to verify numerical stability and convergence of 3D elasti
 2. This package relies on [Madagascar](https://github.com/ahay/src), OpenMP and [scons](http://scons.org), so have them installed or loaded before compiling the code. You may need to modify paths when running tests.
 3. Currently the scheme is based on FDTD of second order in time and space. Free surface boundary condition is implemented on top, and rigid (Dirichlet) boundary condition is implemented on other three sides of the rectangular domain.
 
-===================================================================
-
-## Structure
+### Structure
 * **SConstruct-local/SConstruct-tacc**: python scripts for code compilation on OSX and TACC/Stampede respectively. To compile this package, copy either one of the scripts to SConstruct, and then run scons.
 * **main.cpp**: driver of this program.
 * **init.hpp**: set up precision macros.
@@ -47,9 +45,7 @@ This package is built to verify numerical stability and convergence of 3D elasti
   * **test_sbp.cpp**: functions test SBP property.
 * **tests**: test scripts
 
-===================================================================
-
-## Future Work
+### Future Work
 - [ ] Extend this composite grid scheme to deal with fluid-solid interface.
 - [ ] Extend this composite grid scheme to high order FDTD.
 - [ ] MPI parallelization.
