@@ -10,12 +10,12 @@ import sys
 
 if platform.system()=='Darwin':
     #   main at local
-    main = os.path.abspath('/Users/muhongzhou/Desktop/PhD_codes/ecsg/main')
-    sys.path.append('/Users/muhongzhou/Desktop/PhD_codes/ecsg/tests/test1-cmp-eci-ii/')
+    main = os.path.abspath('/Users/muhongzhou/Desktop/PhD_codes/ecsg/main') #path to ecsg binary
+    sys.path.append('/Users/muhongzhou/Desktop/PhD_codes/ecsg/tests/test1-cmp-eci-ii/') #path to directory containing pareci.py
 elif platform.system()=='Linux':
     #   main at tacc
-    main = os.path.abspath('/work/02049/mz10/ecsg/main')
-    sys.path.append('/work/02049/mz10/ecsg/tests/test1-cmp-eci-ii/')
+    main = os.path.abspath('/work/02049/mz10/ecsg/main') #path to ecsg binary
+    sys.path.append('/work/02049/mz10/ecsg/tests/test1-cmp-eci-ii/') #path to directory containing pareci.py
 else:
     os._exit(1)
 
