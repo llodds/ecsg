@@ -10,8 +10,8 @@ import sys
 
 if platform.system()=='Darwin':
     #   main at local
-    main = os.path.abspath('/Users/muhongzhou/Documents/PhD/reports-doc/R20-ecsg-tacc/main')
-    sys.path.append('/Users/muhongzhou/Documents/PhD/reports-doc/R20-ecsg-tacc/tests/test1-cmp-eci-ii/')
+    main = os.path.abspath('/Users/muhongzhou/Desktop/PhD_codes/ecsg/main')
+    sys.path.append('/Users/muhongzhou/Desktop/PhD_codes/ecsg/tests/test1-cmp-eci-ii/')
 elif platform.system()=='Linux':
     #   main at tacc
     main = os.path.abspath('/work/02049/mz10/ecsg/main')
@@ -57,7 +57,7 @@ grid1['nz']=int(layer1['lz']/grid1['dz']/2)*2
 grid2['nz']=int(layer2['lz']/grid2['dz'])
 
 grids=[grid1, grid2]
-print grids
+print(grids)
 
 
 #=====================================================
@@ -111,7 +111,7 @@ for i in range(len(layers)):
     if max_vel < layers[i]['cp']:
         max_vel = layers[i]['cp']
 dt = min(grid1['dx'],grid1['dy'],grid1['dz'])/max_vel/math.sqrt(3)*cfl #[ms]
-print dt
+print(dt)
 
 #=====================================================
 #   Set up source profile
@@ -132,7 +132,7 @@ ricker_pars = {
     'tmp':ricker_tmp,
     'delrt':1/fpeak,
 }
-print ricker_pars
+print(ricker_pars)
 
 ricker_pars['equation']="(1-2*(%(tmp)f)*(x1-%(delrt)f)*(x1-%(delrt)f))*exp(-(%(tmp)f)*(x1-%(delrt)f)*(x1-%(delrt)f))"%ricker_pars
 Flow('ricker',None,'''math
@@ -179,6 +179,7 @@ Flow('rec_trace.hh','rec_trace.asci','''echo in=${SOURCES[0]} n1=3 n2=4 data_for
 #   Main Program
 movie_dt = 30*dt
 movie_nt = int(duration/(30*dt))
+
 Flow(['out.txt', 'energy_eci_%s'%(test_name), 'res_trace', 'rec_out', 'movie_vx_1', 'movie_vx_2'],
      ['ricker', 'rec_trace.hh', 'buoy_0', 'buoy_1', 's11_0', 's11_1', 's13_0', 's13_1'],
      main + ''' num_threads=16

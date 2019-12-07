@@ -11,7 +11,7 @@
 
 #SBATCH -n 1
 #SBATCH -N 1
-
+        
 cd /work/02049/mz10/ecsg/tests/test1-cmp-eci-ii/eci &&
 FIGDIR="$RSFFIGS/tests/test1-cmp-eci-ii/eci" &&
 TESTDIR="/work/02049/mz10/ecsg/tests/test1-cmp-eci-ii" &&

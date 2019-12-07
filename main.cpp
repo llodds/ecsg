@@ -231,8 +231,8 @@ int main(int argc, char* argv[])
         
         
         //===test SBP property
-        if(check_energy)
-            TestSBP(sim);
+//        if(check_energy)
+//            TestSBP(sim);
         
         
         begin_ghost=clock();
