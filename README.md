@@ -50,3 +50,14 @@ This package is built to verify numerical stability and convergence of 3D elasti
 - [ ] Extend this composite grid scheme to high order FDTD.
 - [ ] MPI parallelization.
 
+### Run a test example (composite grid simulation based on energy conserving condition)
+1. Install Madagascar (http://www.ahay.org/wiki/Download)
+2. Run "scons" in ecsg/ and get the executable called "main"
+3. cd ecsg/tests/test1-cmp-eci-ii
+4. cp par1.py pareci.py # parcei.py is the input parameter file used by the SConstruct in the test folder
+5. cd eci 
+6. Change the path to ecsg binary and pareci.py at line 13,14 or line 17,18 (depending on the computing platform for the test)
+7. scons in eci folder to get the correct result # it takes a Macbook Pro (2.5GHz Intel Corei7) about 10 minutes to finish the test
+
+
+
